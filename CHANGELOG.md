@@ -1,5 +1,9 @@
 # Registro de versiones
 
+## v3.5.0 — 2026-09-08
+- Nueva diapositiva `16-1.jpeg`, después de `16.jpg`.
+- Fix real del video offline: antes se descargaba completo recién al reproducirlo por primera vez (bloqueando la reproducción hasta terminar, por eso nunca quedaba guardado). Ahora el video completo se precarga solo al instalar la app (en segundo plano), y online siempre se usa la red directa; la copia guardada solo se usa como respaldo si falla la conexión. Se sube la versión de caché (v4).
+
 ## v3.4.0 — 2026-09-08
 - Fix: el video no se podía reproducir offline porque la versión anterior dejaba pasar los pedidos de rango directo a la red (sin respaldo). Ahora el service worker guarda el video completo la primera vez que se reproduce con internet, y arma él mismo los pedazos (rangos) que pide el reproductor a partir de esa copia — funciona tanto online como offline. Se sube la versión de caché (v3).
 

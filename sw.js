@@ -1,10 +1,11 @@
-const CACHE_NAME = 'presentacion-v3';
+const CACHE_NAME = 'presentacion-v4';
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
+  './assets/slides/2.mp4',
 ];
 
 self.addEventListener('install', (event) => {
@@ -24,31 +25,24 @@ self.addEventListener('activate', (event) => {
 });
 
 /*
-  El navegador pide el video por partes (encabezado Range) para poder
-  reproducirlo y buscar posición. El Cache API no admite guardar esas
-  respuestas parciales (206) directamente, así que para que el video
-  funcione offline: guardamos el archivo COMPLETO (sin Range) la primera
-  vez, y de ahí en más armamos nosotros mismos el pedazo (206) que pide
-  cada Range a partir de esa copia completa, tanto online como offline.
+  El navegador pide el video por partes (encabezado Range). Con internet,
+  dejamos que la red lo maneje directo (rápido y nativo). El video completo
+  ya quedó guardado de antemano en la instalación (ver APP_SHELL), así que
+  si falla la red (sin internet) armamos nosotros mismos el pedazo (206)
+  que pide cada Range a partir de esa copia completa.
 */
 async function handleRangeRequest(event){
-  const cache = await caches.open(CACHE_NAME);
-  const url = event.request.url;
+  try {
+    return await fetch(event.request);
+  } catch (err) {
+    // sin internet: seguimos abajo con la copia guardada
+  }
 
-  let full = await cache.match(url);
+  const cache = await caches.open(CACHE_NAME);
+  const full = await cache.match(event.request.url);
 
   if(!full){
-    try {
-      const netResponse = await fetch(url);
-      if(netResponse.ok && netResponse.status === 200){
-        await cache.put(url, netResponse.clone());
-        full = netResponse;
-      } else {
-        return fetch(event.request);
-      }
-    } catch (err) {
-      return new Response('Video no disponible sin conexión.', { status: 503 });
-    }
+    return new Response('Video no disponible sin conexión.', { status: 503 });
   }
 
   const buffer = await full.clone().arrayBuffer();
