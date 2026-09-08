@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.0.0 — 2026-09-08
+- Título "INTERACTUEMOS" (mismo estilo que la diapositiva 9) arriba del quiz "Mito o Realidad".
+
 ## v2.9.2 — 2026-09-08
 - Se mueve el quiz "Mito o Realidad" de la última posición a justo después de `16.jpg` (tras los 4 grandes pasos), antes de `17.jpg`, `19.jpg` y `20.jpg`.
 

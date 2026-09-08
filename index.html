@@ -279,8 +279,10 @@
     background-size:cover;
     background-position:center;
     display:flex;
+    flex-direction:column;
     align-items:center;
     justify-content:center;
+    gap:18px;
   }
   .quiz-box{
     position:relative;
@@ -371,7 +373,7 @@
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v2.9.2</div>
+  <div id="version">v3.0.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -516,12 +518,20 @@ function buildQuizSlide(item){
     wrap.style.backgroundImage = `url('${item.bg}')`;
   }
 
+  const heading = document.createElement('div');
+  heading.className = 'cards-title';
+  heading.textContent = 'INTERACTUEMOS';
+  wrap.appendChild(heading);
+
+  const content = document.createElement('div');
+  wrap.appendChild(content);
+
   let qIndex = 0;
   let score = 0;
   let answered = false;
 
   function paint(){
-    wrap.innerHTML = '';
+    content.innerHTML = '';
 
     if(qIndex >= item.questions.length){
       const box = document.createElement('div');
@@ -537,7 +547,7 @@ function buildQuizSlide(item){
         answered = false;
         paint();
       });
-      wrap.appendChild(box);
+      content.appendChild(box);
       return;
     }
 
@@ -584,7 +594,7 @@ function buildQuizSlide(item){
       });
     });
 
-    wrap.appendChild(box);
+    content.appendChild(box);
   }
 
   paint();
