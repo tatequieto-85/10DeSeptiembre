@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.2.0 — 2026-09-07
+- Nueva décima y undécima diapositiva de imagen (`assets/slides/10.jpg`, `assets/slides/11.jpg`).
+
 ## v2.1.1 — 2026-09-07
 - Se quita el resplandor gris (text-shadow) del título "INTERACTUEMOS"; queda solo el color sólido #d88b1a.
 
