@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v1.9.0 — 2026-09-07
+- Nueva octava diapositiva de imagen (`assets/slides/8.jpg`).
+
 ## v1.8.0 — 2026-09-07
 - Nueva sexta y séptima diapositiva de imagen (`assets/slides/6.jpg`, `assets/slides/7.jpg`).
 
