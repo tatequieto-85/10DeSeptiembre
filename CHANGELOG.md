@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.0.1 — 2026-09-08
+- Actualización de contenido: imágenes 1, 3-8, 10-17, 19 y 20.
+
 ## v3.0.0 — 2026-09-08
 - Título "INTERACTUEMOS" (mismo estilo que la diapositiva 9) arriba del quiz "Mito o Realidad".
 
