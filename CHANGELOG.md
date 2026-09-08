@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.3.0 — 2026-09-07
+- Nueva duodécima y decimotercera diapositiva de imagen (`assets/slides/12.jpg`, `assets/slides/13.jpg`).
+
 ## v2.2.0 — 2026-09-07
 - Nueva décima y undécima diapositiva de imagen (`assets/slides/10.jpg`, `assets/slides/11.jpg`).
 
