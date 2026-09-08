@@ -210,12 +210,108 @@
   .card-back.no-validar{ background:#8e1519; }
   .card-back .verdict{ font-weight:800; font-size:1.35em; }
   .card-back .category{ font-size:1em; opacity:.9; }
+
+  /* Diapositiva de quiz "Mito o Realidad" */
+  .quiz-slide{
+    position:relative;
+    width:100%;
+    height:100%;
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .quiz-box{
+    position:relative;
+    width:min(760px, 90vw);
+    background:rgba(10,10,10,.88);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:16px;
+    padding:40px;
+    text-align:center;
+    color:#fff;
+  }
+  .quiz-progress{
+    font-size:.9em;
+    color:#9aa1a8;
+    margin-bottom:8px;
+  }
+  .quiz-title{
+    color:#d88b1a;
+    font-size:1.6em;
+    font-weight:800;
+    margin-bottom:20px;
+    letter-spacing:1px;
+  }
+  .quiz-statement{
+    font-size:1.6em;
+    font-weight:600;
+    line-height:1.4;
+    margin-bottom:28px;
+  }
+  .quiz-buttons{
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .quiz-btn{
+    flex:1;
+    min-width:180px;
+    font-size:1.3em;
+    font-weight:800;
+    padding:20px;
+    border-radius:12px;
+    border:2px solid rgba(255,255,255,.3);
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    cursor:pointer;
+    transition:background .15s, transform .1s;
+  }
+  .quiz-btn:hover:not(:disabled){ background:rgba(255,255,255,.18); }
+  .quiz-btn:active:not(:disabled){ transform:scale(.97); }
+  .quiz-btn:disabled{ cursor:default; opacity:.6; }
+  .quiz-btn.correct{ background:#1a7f37; border-color:#1a7f37; opacity:1; }
+  .quiz-btn.wrong{ background:#8e1519; border-color:#8e1519; opacity:1; }
+  .quiz-feedback{
+    margin-top:26px;
+    padding-top:22px;
+    border-top:1px solid rgba(255,255,255,.15);
+  }
+  .feedback-verdict{
+    font-size:1.3em;
+    font-weight:800;
+    margin-bottom:10px;
+  }
+  .feedback-text{
+    font-size:1.1em;
+    line-height:1.5;
+    margin-bottom:20px;
+    color:#e6edf3;
+  }
+  .quiz-next, .quiz-restart{
+    font-size:1.05em;
+    font-weight:700;
+    padding:12px 28px;
+    border-radius:10px;
+    border:none;
+    background:#d88b1a;
+    color:#0d1117;
+    cursor:pointer;
+  }
+  .quiz-next:hover, .quiz-restart:hover{ filter:brightness(1.1); }
+  .quiz-score{
+    font-size:1.5em;
+    font-weight:800;
+    margin-bottom:24px;
+  }
 </style>
 </head>
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v2.5.0</div>
+  <div id="version">v2.6.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -267,6 +363,47 @@ const slides = [
   { type: 'image', src: 'assets/slides/15.jpg' },
   { type: 'image', src: 'assets/slides/16.jpg' },
   { type: 'image', src: 'assets/slides/17.jpg' },
+  {
+    type: 'quiz',
+    title: 'MITO O REALIDAD',
+    questions: [
+      {
+        statement: 'Preguntar directamente sobre el suicidio puede plantarle la idea a la persona.',
+        answer: 'mito',
+        explanation: 'Preguntar de forma directa y con cuidado no induce la idea; al contrario, permite que la persona se sienta escuchada y puede ser el primer paso para pedir ayuda.'
+      },
+      {
+        statement: 'Una persona puede estar sonriendo y, aun así, estar sufriendo por dentro.',
+        answer: 'realidad',
+        explanation: 'Muchas personas ocultan su dolor detrás de una sonrisa. La apariencia externa no siempre refleja lo que alguien siente.'
+      },
+      {
+        statement: 'Hablar de suicidio es solo una forma de buscar atención.',
+        answer: 'mito',
+        explanation: 'Minimizarlo así puede impedir que la persona reciba ayuda real. Toda mención al suicidio debe tomarse en serio.'
+      },
+      {
+        statement: 'Si alguien dice que está pensando en suicidarse, hay que tomarlo en serio.',
+        answer: 'realidad',
+        explanation: 'Siempre hay que tomarlo en serio y actuar: escuchar sin juzgar y buscar apoyo profesional.'
+      },
+      {
+        statement: 'El aumento en el consumo de alcohol puede ser una señal de alerta de suicidio.',
+        answer: 'realidad',
+        explanation: 'El consumo de sustancias en aumento es una de las señales de alerta reconocidas.'
+      },
+      {
+        statement: 'Desprenderse de pertenencias importantes puede ser una señal de alerta de suicidio.',
+        answer: 'realidad',
+        explanation: 'Regalar o deshacerse de objetos valiosos suele ser una señal de que la persona se está despidiendo.'
+      },
+      {
+        statement: 'Si alguien me confía que ha pensado en suicidarse, soy yo quien debe resolverlo.',
+        answer: 'mito',
+        explanation: 'No es responsabilidad de una sola persona resolverlo. Lo importante es escuchar, acompañar y conectar a la persona con ayuda profesional.'
+      },
+    ]
+  },
   // { type: 'pdf',   src: 'assets/slides/presentacion.pdf' },
 ];
 
@@ -301,6 +438,88 @@ async function renderPdf(src){
 
   const ctx = canvas.getContext('2d');
   await page.render({ canvasContext: ctx, viewport }).promise;
+}
+
+function buildQuizSlide(item){
+  const wrap = document.createElement('div');
+  wrap.className = 'quiz-slide';
+  if(item.bg){
+    wrap.style.backgroundImage = `url('${item.bg}')`;
+  }
+
+  let qIndex = 0;
+  let score = 0;
+  let answered = false;
+
+  function paint(){
+    wrap.innerHTML = '';
+
+    if(qIndex >= item.questions.length){
+      const box = document.createElement('div');
+      box.className = 'quiz-box';
+      box.innerHTML = `
+        <div class="quiz-title">${item.title || 'Mito o Realidad'}</div>
+        <div class="quiz-score">Resultado: ${score} / ${item.questions.length}</div>
+        <button class="quiz-restart">Volver a jugar</button>
+      `;
+      box.querySelector('.quiz-restart').addEventListener('click', ()=>{
+        qIndex = 0;
+        score = 0;
+        answered = false;
+        paint();
+      });
+      wrap.appendChild(box);
+      return;
+    }
+
+    const q = item.questions[qIndex];
+    const box = document.createElement('div');
+    box.className = 'quiz-box';
+    box.innerHTML = `
+      <div class="quiz-progress">${qIndex + 1} / ${item.questions.length}</div>
+      <div class="quiz-title">${item.title || 'Mito o Realidad'}</div>
+      <div class="quiz-statement">${q.statement}</div>
+      <div class="quiz-buttons">
+        <button class="quiz-btn" data-choice="mito">MITO</button>
+        <button class="quiz-btn" data-choice="realidad">REALIDAD</button>
+      </div>
+      <div class="quiz-feedback" hidden></div>
+    `;
+
+    const feedback = box.querySelector('.quiz-feedback');
+    box.querySelectorAll('.quiz-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(answered) return;
+        answered = true;
+        const choice = btn.dataset.choice;
+        const correct = choice === q.answer;
+        if(correct) score++;
+
+        box.querySelectorAll('.quiz-btn').forEach(b=>{
+          b.disabled = true;
+          if(b.dataset.choice === q.answer) b.classList.add('correct');
+          else if(b === btn) b.classList.add('wrong');
+        });
+
+        feedback.hidden = false;
+        feedback.innerHTML = `
+          <div class="feedback-verdict">${correct ? '✔ ¡Correcto!' : '✘ Incorrecto'}</div>
+          <div class="feedback-text">Es <strong>${q.answer.toUpperCase()}</strong>: ${q.explanation}</div>
+          <button class="quiz-next">${qIndex + 1 < item.questions.length ? 'Siguiente' : 'Ver resultado'}</button>
+        `;
+        feedback.querySelector('.quiz-next').addEventListener('click', ()=>{
+          qIndex++;
+          answered = false;
+          paint();
+        });
+      });
+    });
+
+    wrap.appendChild(box);
+  }
+
+  paint();
+  return wrap;
 }
 
 async function render(){
@@ -364,6 +583,8 @@ async function render(){
 
     wrap.appendChild(grid);
     viewer.appendChild(wrap);
+  } else if(item.type === 'quiz'){
+    viewer.appendChild(buildQuizSlide(item));
   }
 
   counter.textContent = `${current + 1} / ${slides.length}`;

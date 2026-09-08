@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.6.0 — 2026-09-08
+- Nueva diapositiva final: quiz "Mito o Realidad" (7 afirmaciones sobre suicidio), una a la vez, con botones grandes MITO/REALIDAD, feedback con explicación y puntaje final con opción de reiniciar.
+
 ## v2.5.0 — 2026-09-08
 - Diapositiva 16 ahora usa `16.jpg` en vez de `16.jfif`.
 - Nueva decimoséptima diapositiva (`17.jpg`).
