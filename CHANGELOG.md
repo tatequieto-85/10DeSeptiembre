@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.3.0 — 2026-09-08
+- La página ahora es instalable (PWA): manifest.json, íconos y service worker con caché "network-first" (usa internet cuando hay, y sirve la última copia guardada cuando no hay). Se puede instalar desde el navegador para que quede como acceso directo y funcione sin conexión una vez que se visitó una vez online.
+
 ## v3.2.1 — 2026-09-08
 - PDF.js ya no se carga al abrir la página; se carga bajo demanda solo si alguna diapositiva es tipo PDF. Así, si no hay internet en el momento de abrir la presentación, el resto de la navegación (imágenes/video ya cargados) sigue funcionando en vez de romperse por completo.
 

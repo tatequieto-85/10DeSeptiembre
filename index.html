@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Presentación</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d88b1a">
+<link rel="icon" href="assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{
@@ -373,7 +377,7 @@
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v3.2.1</div>
+  <div id="version">v3.3.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -786,6 +790,12 @@ function runTutorial(){
 }
 
 render().then(()=> setTimeout(runTutorial, 800));
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
