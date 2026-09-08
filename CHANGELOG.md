@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.6.1 — 2026-09-08
+- Corrección de orden: se reincorpora `16.jfif` como diapositiva 16; `16.jpg` pasa a ser la 17 y `17.jpg` la 18 (antes `16.jfif` se había reemplazado por error).
+
 ## v2.6.0 — 2026-09-08
 - Nueva diapositiva final: quiz "Mito o Realidad" (7 afirmaciones sobre suicidio), una a la vez, con botones grandes MITO/REALIDAD, feedback con explicación y puntaje final con opción de reiniciar.
 
