@@ -1,5 +1,9 @@
 # Registro de versiones
 
+## v2.8.0 — 2026-09-08
+- Botones de navegación más grandes y alargados (píldora), con más contraste y menos transparencia cuando están deshabilitados, para que nunca se pierdan contra el fondo.
+- Tutorial animado al cargar la página: resalta uno por uno el botón anterior, siguiente y pantalla completa con un anillo pulsante, una mano que "toca" y una etiqueta explicando su función. Se puede saltar.
+
 ## v2.7.0 — 2026-09-08
 - Nuevas diapositivas de imagen `19.jpg` y `20.jpg`, antes del quiz final.
 
