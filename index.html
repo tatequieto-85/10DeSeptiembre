@@ -20,7 +20,8 @@
     justify-content:center;
     background:#000;
   }
-  #viewer video{
+  #viewer video,
+  #viewer img{
     width:100%;
     height:100%;
     border:none;
@@ -98,7 +99,7 @@
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v1.0.0</div>
+  <div id="version">v1.1.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -116,9 +117,11 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs
   Ejemplo:
   { type: 'pdf',   src: 'assets/slides/01-intro.pdf' },
   { type: 'video', src: 'assets/slides/02-demo.mp4'  },
+  { type: 'image', src: 'assets/slides/03-foto.webp' },
 */
 const slides = [
-  { type: 'pdf', src: 'assets/slides/presentacion.pdf' },
+  { type: 'image', src: 'assets/slides/UNO.webp' },
+  // { type: 'pdf',   src: 'assets/slides/presentacion.pdf' },
   // { type: 'video', src: 'assets/slides/02-demo.mp4'  },
 ];
 
@@ -175,6 +178,10 @@ async function render(){
     video.src = item.src;
     video.controls = true;
     viewer.appendChild(video);
+  } else if(item.type === 'image'){
+    const img = document.createElement('img');
+    img.src = item.src;
+    viewer.appendChild(img);
   }
 
   counter.textContent = `${current + 1} / ${slides.length}`;
