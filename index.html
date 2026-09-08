@@ -371,7 +371,7 @@
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v2.9.0</div>
+  <div id="version">v2.9.1</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -410,7 +410,6 @@ const slides = [
   { type: 'image', src: 'assets/slides/8.jpg' },
   {
     type: 'cards',
-    bg: 'assets/slides/9.jpg',
     cards: [
       { front: '"No es para tanto" / "Podría ser peor"', validar:false, category:'Minimizar' },
       { front: '"Es fácil de solucionar, solo haz esto"', validar:false, category:'Minimizar' },
@@ -624,7 +623,9 @@ async function render(){
   } else if(item.type === 'cards'){
     const wrap = document.createElement('div');
     wrap.className = 'cards-slide';
-    wrap.style.backgroundImage = `url('${item.bg}')`;
+    if(item.bg){
+      wrap.style.backgroundImage = `url('${item.bg}')`;
+    }
 
     const title = document.createElement('div');
     title.className = 'cards-title';

@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.9.1 — 2026-09-08
+- La diapositiva de tarjetas (9) ya no usa `9.jpg` como fondo; ahora usa el mismo fondo compartido (`assets/fondo.gif`) que las demás diapositivas.
+
 ## v2.9.0 — 2026-09-08
 - Primera diapositiva ahora usa `assets/slides/1.jpg` en vez de `UNO.gif`.
 
