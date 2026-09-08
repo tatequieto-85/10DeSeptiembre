@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v1.3.1 — 2026-09-07
+- Se quita la diapositiva en blanco. Ahora quedan dos: 1) imagen de presentación, 2) video.
+
 ## v1.3.0 — 2026-09-07
 - Nueva tercera diapositiva de video (`assets/slides/2.mp4`), centrada en pantalla.
 - Clic sobre el video: se expande a pantalla completa dejando libre el alto de las flechas de navegación (nunca las tapa).
