@@ -38,6 +38,17 @@
     padding:20px;
   }
 
+  /* Versión de la página */
+  #version{
+    position:fixed;
+    bottom:6px;
+    left:8px;
+    color:rgba(255,255,255,.35);
+    font-size:10px;
+    user-select:none;
+    z-index:10;
+  }
+
   /* Contador de diapositiva */
   #counter{
     position:fixed;
@@ -87,6 +98,7 @@
 <body>
 
   <div id="viewer"></div>
+  <div id="version">v1.0.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
