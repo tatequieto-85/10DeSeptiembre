@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v1.4.0 — 2026-09-07
+- Nueva tercera diapositiva de imagen (`assets/slides/3.webp`).
+
 ## v1.3.1 — 2026-09-07
 - Se quita la diapositiva en blanco. Ahora quedan dos: 1) imagen de presentación, 2) video.
 
