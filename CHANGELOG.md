@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.0.2 — 2026-09-08
+- Actualización de la imagen de la diapositiva 5 (`5.jpg`).
+
 ## v3.0.1 — 2026-09-08
 - Actualización de contenido: imágenes 1, 3-8, 10-17, 19 y 20.
 
