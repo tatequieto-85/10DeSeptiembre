@@ -1,5 +1,9 @@
 # Registro de versiones
 
+## v2.5.0 — 2026-09-08
+- Diapositiva 16 ahora usa `16.jpg` en vez de `16.jfif`.
+- Nueva decimoséptima diapositiva (`17.jpg`).
+
 ## v2.4.0 — 2026-09-08
 - Nueva decimocuarta, decimoquinta y decimosexta diapositiva (`14.jpg`, `15.jpg`, `16.jfif`).
 
