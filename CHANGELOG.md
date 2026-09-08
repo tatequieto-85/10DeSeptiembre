@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.3.1 — 2026-09-08
+- Fix: el service worker rompía la reproducción del video porque intentaba guardar en caché los pedidos de rango (Range) que usa el navegador al reproducir/buscar. Ahora esos pedidos pasan directo a la red sin pasar por caché. Se sube la versión de caché (v2) para limpiar la copia rota.
+
 ## v3.3.0 — 2026-09-08
 - La página ahora es instalable (PWA): manifest.json, íconos y service worker con caché "network-first" (usa internet cuando hay, y sirve la última copia guardada cuando no hay). Se puede instalar desde el navegador para que quede como acceso directo y funcione sin conexión una vez que se visitó una vez online.
 

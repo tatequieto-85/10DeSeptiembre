@@ -1,4 +1,4 @@
-const CACHE_NAME = 'presentacion-v1';
+const CACHE_NAME = 'presentacion-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -32,11 +32,18 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
+  // Pedidos de rango (video buscando/seek) se dejan pasar directo a la red:
+  // el Cache API no soporta respuestas parciales (206) y guardarlas rompe
+  // la reproducción/búsqueda del video.
+  if (event.request.headers.has('range')) return;
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        if (response.ok && response.status === 200) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy)).catch(()=>{});
+        }
         return response;
       })
       .catch(() => caches.match(event.request))
