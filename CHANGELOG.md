@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.9.0 — 2026-09-08
+- Primera diapositiva ahora usa `assets/slides/1.jpg` en vez de `UNO.gif`.
+
 ## v2.8.1 — 2026-09-08
 - Actualización de la imagen de la diapositiva 6 (`6.jpg`).
 
