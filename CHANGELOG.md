@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.5.3 — 2026-09-08
+- Actualización de las imágenes 1 y 10.
+
 ## v3.5.2 — 2026-09-08
 - Actualización de contenido: imágenes 1, 3-8, 10-17, 19, 20 y 16-1.
 
