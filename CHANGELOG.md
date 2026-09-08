@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.2.1 — 2026-09-08
+- PDF.js ya no se carga al abrir la página; se carga bajo demanda solo si alguna diapositiva es tipo PDF. Así, si no hay internet en el momento de abrir la presentación, el resto de la navegación (imágenes/video ya cargados) sigue funcionando en vez de romperse por completo.
+
 ## v3.2.0 — 2026-09-08
 - Nuevas diapositivas `2-31.jpg` y `2-32.jpg`, justo después de `2-3.jpg`.
 

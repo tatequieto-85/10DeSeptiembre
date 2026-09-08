@@ -373,7 +373,7 @@
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v3.2.0</div>
+  <div id="version">v3.2.1</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -389,8 +389,18 @@
   </div>
 
 <script type="module">
-import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.3.289/pdf.min.mjs";
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.3.289/pdf.worker.min.mjs";
+/*
+  PDF.js se carga bajo demanda (solo si alguna diapositiva es tipo 'pdf'),
+  para que la presentación no dependa de una carga externa cuando no hay PDFs.
+*/
+let pdfjsLib = null;
+async function loadPdfjs(){
+  if(!pdfjsLib){
+    pdfjsLib = await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.3.289/pdf.min.mjs");
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.3.289/pdf.worker.min.mjs";
+  }
+  return pdfjsLib;
+}
 
 /*
   Lista de diapositivas. Cada elemento es un PDF o un video.
@@ -491,7 +501,8 @@ const pdfCache = new Map();
 async function renderPdf(src){
   let pdf = pdfCache.get(src);
   if(!pdf){
-    pdf = await pdfjsLib.getDocument(src).promise;
+    const lib = await loadPdfjs();
+    pdf = await lib.getDocument(src).promise;
     pdfCache.set(src, pdf);
   }
   const page = await pdf.getPage(1);
