@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.4.0 — 2026-09-08
+- Nueva decimocuarta, decimoquinta y decimosexta diapositiva (`14.jpg`, `15.jpg`, `16.jfif`).
+
 ## v2.3.0 — 2026-09-07
 - Nueva duodécima y decimotercera diapositiva de imagen (`assets/slides/12.jpg`, `assets/slides/13.jpg`).
 
