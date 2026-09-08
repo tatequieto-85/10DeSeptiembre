@@ -20,6 +20,9 @@
     justify-content:center;
     background:#000;
   }
+  #viewer.with-bg{
+    background:#000 url('assets/fondo.gif') center/cover no-repeat;
+  }
   #viewer video,
   #viewer img{
     width:100%;
@@ -99,7 +102,7 @@
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v1.1.0</div>
+  <div id="version">v1.2.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -121,6 +124,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs
 */
 const slides = [
   { type: 'image', src: 'assets/slides/UNO.webp' },
+  { type: 'blank' },
   // { type: 'pdf',   src: 'assets/slides/presentacion.pdf' },
   // { type: 'video', src: 'assets/slides/02-demo.mp4'  },
 ];
@@ -169,9 +173,13 @@ async function render(){
     return;
   }
 
+  viewer.classList.toggle('with-bg', current !== 0);
+
   const item = slides[current];
 
-  if(item.type === 'pdf'){
+  if(item.type === 'blank'){
+    // sin contenido propio: solo se ve el fondo
+  } else if(item.type === 'pdf'){
     await renderPdf(item.src);
   } else if(item.type === 'video'){
     const video = document.createElement('video');
