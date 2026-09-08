@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.4.0 — 2026-09-08
+- Fix: el video no se podía reproducir offline porque la versión anterior dejaba pasar los pedidos de rango directo a la red (sin respaldo). Ahora el service worker guarda el video completo la primera vez que se reproduce con internet, y arma él mismo los pedazos (rangos) que pide el reproductor a partir de esa copia — funciona tanto online como offline. Se sube la versión de caché (v3).
+
 ## v3.3.1 — 2026-09-08
 - Fix: el service worker rompía la reproducción del video porque intentaba guardar en caché los pedidos de rango (Range) que usa el navegador al reproducir/buscar. Ahora esos pedidos pasan directo a la red sin pasar por caché. Se sube la versión de caché (v2) para limpiar la copia rota.
 
