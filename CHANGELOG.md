@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v1.2.1 — 2026-09-07
+- Primera diapositiva ahora es `assets/slides/UNO.gif` en vez de `UNO.webp`.
+
 ## v1.2.0 — 2026-09-07
 - Fondo (`assets/fondo.gif`) aplicado a todas las diapositivas excepto la primera.
 - Nueva segunda diapositiva (`blank`) que solo muestra ese fondo.
