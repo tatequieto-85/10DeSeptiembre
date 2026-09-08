@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.2.0 — 2026-09-08
+- Nuevas diapositivas `2-31.jpg` y `2-32.jpg`, justo después de `2-3.jpg`.
+
 ## v3.1.1 — 2026-09-08
 - Actualización de la imagen `2-3.jpg`.
 
