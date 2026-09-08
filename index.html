@@ -20,13 +20,16 @@
     justify-content:center;
     background:#000;
   }
-  #viewer iframe,
   #viewer video{
     width:100%;
     height:100%;
     border:none;
     object-fit:contain;
     background:#000;
+  }
+  #viewer canvas{
+    max-width:100%;
+    max-height:100%;
   }
   #empty-msg{
     color:#8b949e;
@@ -90,7 +93,10 @@
     <button id="next-btn" class="nav-btn" title="Siguiente">›</button>
   </div>
 
-<script>
+<script type="module">
+import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.3.289/pdf.min.mjs";
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.3.289/pdf.worker.min.mjs";
+
 /*
   Lista de diapositivas. Cada elemento es un PDF o un video.
   Agregá tus archivos en assets/slides/ y sumalos acá en el orden que quieras.
@@ -109,8 +115,35 @@ const viewer = document.getElementById('viewer');
 const counter = document.getElementById('counter');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
+const pdfCache = new Map();
 
-function render(){
+async function renderPdf(src){
+  let pdf = pdfCache.get(src);
+  if(!pdf){
+    pdf = await pdfjsLib.getDocument(src).promise;
+    pdfCache.set(src, pdf);
+  }
+  const page = await pdf.getPage(1);
+  const dpr = window.devicePixelRatio || 1;
+  const baseViewport = page.getViewport({ scale: 1 });
+  const fitScale = Math.min(
+    viewer.clientWidth / baseViewport.width,
+    viewer.clientHeight / baseViewport.height
+  );
+  const viewport = page.getViewport({ scale: fitScale * dpr });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  canvas.style.width = (viewport.width / dpr) + 'px';
+  canvas.style.height = (viewport.height / dpr) + 'px';
+  viewer.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  await page.render({ canvasContext: ctx, viewport }).promise;
+}
+
+async function render(){
   viewer.innerHTML = '';
 
   if(slides.length === 0){
@@ -124,9 +157,7 @@ function render(){
   const item = slides[current];
 
   if(item.type === 'pdf'){
-    const iframe = document.createElement('iframe');
-    iframe.src = item.src;
-    viewer.appendChild(iframe);
+    await renderPdf(item.src);
   } else if(item.type === 'video'){
     const video = document.createElement('video');
     video.src = item.src;
