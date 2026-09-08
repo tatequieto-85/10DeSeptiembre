@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.9.2 — 2026-09-08
+- Se mueve el quiz "Mito o Realidad" de la última posición a justo después de `16.jpg` (tras los 4 grandes pasos), antes de `17.jpg`, `19.jpg` y `20.jpg`.
+
 ## v2.9.1 — 2026-09-08
 - La diapositiva de tarjetas (9) ya no usa `9.jpg` como fondo; ahora usa el mismo fondo compartido (`assets/fondo.gif`) que las demás diapositivas.
 
