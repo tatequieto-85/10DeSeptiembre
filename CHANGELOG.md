@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.5.1 — 2026-09-08
+- Se intercambia el orden: `16-1.jpeg` ahora va antes de `16.jpg`.
+
 ## v3.5.0 — 2026-09-08
 - Nueva diapositiva `16-1.jpeg`, después de `16.jpg`.
 - Fix real del video offline: antes se descargaba completo recién al reproducirlo por primera vez (bloqueando la reproducción hasta terminar, por eso nunca quedaba guardado). Ahora el video completo se precarga solo al instalar la app (en segundo plano), y online siempre se usa la red directa; la copia guardada solo se usa como respaldo si falla la conexión. Se sube la versión de caché (v4).
