@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.7.0 — 2026-09-08
+- Nuevas diapositivas de imagen `19.jpg` y `20.jpg`, antes del quiz final.
+
 ## v2.6.1 — 2026-09-08
 - Corrección de orden: se reincorpora `16.jfif` como diapositiva 16; `16.jpg` pasa a ser la 17 y `17.jpg` la 18 (antes `16.jfif` se había reemplazado por error).
 
