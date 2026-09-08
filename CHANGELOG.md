@@ -1,5 +1,10 @@
 # Registro de versiones
 
+## v2.1.0 — 2026-09-07
+- Tarjetas del juego más grandes y con texto más grande (legible de lejos).
+- Título "INTERACTUEMOS" en color #d88b1a sobre las tarjetas.
+- Se quita la capa gris que oscurecía la foto de fondo.
+
 ## v2.0.0 — 2026-09-07
 - Nueva novena diapositiva: juego de tarjetas de "Validar / No validar" sobre la foto `9.jpg`. Las tarjetas se voltean al hacer clic y aparecen en orden aleatorio (revueltas) en cada carga.
 
