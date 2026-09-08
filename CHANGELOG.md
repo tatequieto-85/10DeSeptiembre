@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.5.2 — 2026-09-08
+- Actualización de contenido: imágenes 1, 3-8, 10-17, 19, 20 y 16-1.
+
 ## v3.5.1 — 2026-09-08
 - Se intercambia el orden: `16-1.jpeg` ahora va antes de `16.jpg`.
 
