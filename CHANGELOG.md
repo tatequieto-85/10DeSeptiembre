@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.0.0 — 2026-09-07
+- Nueva novena diapositiva: juego de tarjetas de "Validar / No validar" sobre la foto `9.jpg`. Las tarjetas se voltean al hacer clic y aparecen en orden aleatorio (revueltas) en cada carga.
+
 ## v1.9.0 — 2026-09-07
 - Nueva octava diapositiva de imagen (`assets/slides/8.jpg`).
 

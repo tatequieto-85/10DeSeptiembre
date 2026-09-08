@@ -135,12 +135,82 @@
     transition:background .15s;
   }
   #fullscreen-btn:hover{ background:rgba(255,255,255,.15); }
+
+  /* Diapositiva con juego de tarjetas sobre una foto de fondo */
+  .cards-slide{
+    position:relative;
+    width:100%;
+    height:100%;
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .cards-slide::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.35);
+  }
+  .cards-grid{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(4, minmax(130px,1fr));
+    grid-auto-rows:140px;
+    gap:14px;
+    padding:20px;
+    max-width:920px;
+    width:92%;
+  }
+  .card{
+    perspective:800px;
+    cursor:pointer;
+  }
+  .card-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transition:transform .5s;
+    transform-style:preserve-3d;
+  }
+  .card.flipped .card-inner{
+    transform:rotateY(180deg);
+  }
+  .card-face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:10px;
+    font-size:.82em;
+    line-height:1.3;
+    gap:6px;
+  }
+  .card-front{
+    background:rgba(20,20,20,.85);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.2);
+  }
+  .card-back{
+    background:#1a7f37;
+    color:#fff;
+    transform:rotateY(180deg);
+  }
+  .card-back.no-validar{ background:#8e1519; }
+  .card-back .verdict{ font-weight:bold; font-size:1.05em; }
+  .card-back .category{ font-size:.78em; opacity:.85; }
 </style>
 </head>
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v1.9.0</div>
+  <div id="version">v2.0.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -170,6 +240,20 @@ const slides = [
   { type: 'image', src: 'assets/slides/6.jpg' },
   { type: 'image', src: 'assets/slides/7.jpg' },
   { type: 'image', src: 'assets/slides/8.jpg' },
+  {
+    type: 'cards',
+    bg: 'assets/slides/9.jpg',
+    cards: [
+      { front: '"No es para tanto" / "Podría ser peor"', validar:false, category:'Minimizar' },
+      { front: '"Es fácil de solucionar, solo haz esto"', validar:false, category:'Minimizar' },
+      { front: '"Yo también me he sentido mal y salí adelante"', validar:false, category:'Comparar' },
+      { front: '"Piensa en tu familia" / "Eso es egoísta"', validar:false, category:'Sermonear (aumenta la culpa)' },
+      { front: '"Entiendo que te sientas así, es una situación difícil"', validar:true, category:'Reconocer la emoción' },
+      { front: '"Gracias por confiar en mí y contarme esto"', validar:true, category:'Agradecer la confianza' },
+      { front: '"Estoy acá con vos, no tenés que pasar esto solo/a"', validar:true, category:'Acompañar' },
+      { front: '"¿Cómo te puedo ayudar? Contame más"', validar:true, category:'Escuchar activamente' },
+    ]
+  },
   // { type: 'pdf',   src: 'assets/slides/presentacion.pdf' },
 ];
 
@@ -235,6 +319,33 @@ async function render(){
     const img = document.createElement('img');
     img.src = item.src;
     viewer.appendChild(img);
+  } else if(item.type === 'cards'){
+    const wrap = document.createElement('div');
+    wrap.className = 'cards-slide';
+    wrap.style.backgroundImage = `url('${item.bg}')`;
+
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+
+    const shuffled = [...item.cards].sort(()=> Math.random() - 0.5);
+
+    shuffled.forEach(c=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="card-face card-front">${c.front}</div>
+          <div class="card-face card-back ${c.validar ? '' : 'no-validar'}">
+            <div class="verdict">${c.validar ? '✅ Validar' : '❌ No validar'}</div>
+            <div class="category">${c.category}</div>
+          </div>
+        </div>`;
+      card.addEventListener('click', ()=> card.classList.toggle('flipped'));
+      grid.appendChild(card);
+    });
+
+    wrap.appendChild(grid);
+    viewer.appendChild(wrap);
   }
 
   counter.textContent = `${current + 1} / ${slides.length}`;
