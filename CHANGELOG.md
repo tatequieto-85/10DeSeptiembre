@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v2.1.1 — 2026-09-07
+- Se quita el resplandor gris (text-shadow) del título "INTERACTUEMOS"; queda solo el color sólido #d88b1a.
+
 ## v2.1.0 — 2026-09-07
 - Tarjetas del juego más grandes y con texto más grande (legible de lejos).
 - Título "INTERACTUEMOS" en color #d88b1a sobre las tarjetas.
