@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v1.8.0 — 2026-09-07
+- Nueva sexta y séptima diapositiva de imagen (`assets/slides/6.jpg`, `assets/slides/7.jpg`).
+
 ## v1.7.0 — 2026-09-07
 - Botón de pantalla completa (esquina superior derecha) para ocultar la barra de direcciones del navegador durante la presentación.
 
