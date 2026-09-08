@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v1.4.1 — 2026-09-07
+- Tercera diapositiva ahora usa `assets/slides/3.jpg` en vez de `3.webp`.
+
 ## v1.4.0 — 2026-09-07
 - Nueva tercera diapositiva de imagen (`assets/slides/3.webp`).
 
