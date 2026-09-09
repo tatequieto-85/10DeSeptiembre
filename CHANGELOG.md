@@ -1,5 +1,8 @@
 # Registro de versiones
 
+## v3.5.4 — 2026-09-09
+- Redeploy sin cambios de contenido.
+
 ## v3.5.3 — 2026-09-08
 - Actualización de las imágenes 1 y 10.
 
