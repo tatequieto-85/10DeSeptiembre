@@ -468,13 +468,19 @@
   .conv-due.late{ color:#ff7b7b; font-weight:600; }
   .conv-item select{ padding:5px 8px; border-radius:8px; background:#222; color:#fff; border:1px solid rgba(255,255,255,.3); }
   .conv-empty{ text-align:center; opacity:.8; padding:30px; }
+  .conv-table{ width:100%; border-collapse:collapse; background:rgba(0,0,0,.72); border-radius:14px; overflow:hidden; }
+  .conv-table th, .conv-table td{ padding:10px 12px; text-align:left; border-bottom:1px solid rgba(255,255,255,.15); vertical-align:top; }
+  .conv-table th{ font-size:.85em; opacity:.7; }
+  .conv-table a{ color:#ffc46b; }
+  .conv-act{ white-space:nowrap; }
+  .conv-act .conv-btn{ padding:4px 10px; }
   @media(max-width:520px){ .conv-form{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v3.7.1</div>
+  <div id="version">v3.8.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -995,20 +1001,14 @@ function convRender(){
       <div class="conv-filters">
         ${['Todas',...ESTADOS].map(e=>`<button class="conv-btn sec ${e===convFilter?'on':''}" data-f="${e}">${e}</button>`).join('')}
       </div>
-      ${list.length ? list.map(c=>`
-        <div class="conv-item">
-          <div class="conv-row">
-            <span class="conv-name">${esc(c.nombre)}</span>
-            <select data-id="${c.id}">${ESTADOS.map(e=>`<option ${e===c.estado?'selected':''}>${e}</option>`).join('')}</select>
-          </div>
-          <div class="conv-meta">
-            ${esc(c.entidad)}
-            ${c.fecha ? ` · <span class="conv-due ${c.fecha < today && c.estado==='Por postular' ? 'late':''}">Cierre: ${esc(c.fecha)}</span>` : ''}
-            ${c.enlace ? ` · <a href="${esc(c.enlace)}" target="_blank" rel="noopener" style="color:#ffc46b">Enlace</a>` : ''}
-          </div>
-          ${c.notas ? `<div class="conv-meta">${esc(c.notas)}</div>` : ''}
-          <div><button class="conv-btn sec" data-del="${c.id}">Eliminar</button></div>
-        </div>`).join('') : '<div class="conv-empty">No hay convocatorias. Toca “+ Nueva” para agregar una.</div>'}
+      ${list.length ? `<table class="conv-table">
+        <thead><tr><th>Convocatoria</th><th>Cierre</th><th>Link</th><th></th></tr></thead>
+        <tbody>${list.map(c=>`<tr>
+          <td>${esc(c.nombre)}<div class="conv-meta">${esc(c.entidad)}</div></td>
+          <td class="conv-due ${c.fecha && c.fecha < today && c.estado==='Por postular' ? 'late':''}">${esc(c.fecha) || '—'}</td>
+          <td>${c.enlace ? `<a href="${esc(c.enlace)}" target="_blank" rel="noopener">Abrir</a>` : '—'}</td>
+          <td class="conv-act"><select data-id="${c.id}">${ESTADOS.map(e=>`<option ${e===c.estado?'selected':''}>${e}</option>`).join('')}</select> <button class="conv-btn sec" data-del="${c.id}" title="Eliminar">🗑</button></td>
+        </tr>`).join('')}</tbody></table>` : '<div class="conv-empty">No hay convocatorias. Toca “+ Nueva” para agregar una.</div>'}
     </div>`;
 
   conv.querySelector('#conv-back').onclick = ()=>{ conv.hidden = true; showMainMenu(); };
