@@ -474,7 +474,7 @@
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v3.7.0</div>
+  <div id="version">v3.7.1</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -942,13 +942,32 @@ const conv = document.getElementById('conv');
 let convData = [];
 let convFilter = 'Todas';
 try{ convData = JSON.parse(localStorage.getItem(CONV_KEY)) || []; }catch(e){}
+// URL de la aplicación web de Google Apps Script (ver apps-script/Code.gs).
+// Mientras esté vacía, los datos solo se guardan en este navegador.
+const SHEET_API = 'https://script.google.com/macros/s/AKfycbymT6S_d5Gv9l702_d8e1CimDumYw79FmC6WJtOEuNoyJPEAfPO-9obeGknsVKtSJk1zA/exec';
 const convSave = ()=>{ try{ localStorage.setItem(CONV_KEY, JSON.stringify(convData)); }catch(e){} };
+async function convRemote(action, item, id){
+  if(!SHEET_API) return;
+  try{
+    await fetch(SHEET_API, { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ action, item, id }) });
+  }catch(e){ alert('No se pudo guardar en el Sheet. Revisa tu conexión.'); }
+}
+async function convLoad(){
+  if(!SHEET_API) return;
+  try{
+    const r = await fetch(SHEET_API);
+    convData = await r.json();
+    convSave();
+    convRender();
+  }catch(e){}
+}
 const esc = (t)=> String(t ?? '').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function openConvocatorias(){
   menu.hidden = true;
   conv.hidden = false;
   convRender();
+  convLoad();
 }
 
 function convRender(){
@@ -998,16 +1017,18 @@ function convRender(){
   form.onsubmit = (e)=>{
     e.preventDefault();
     const d = Object.fromEntries(new FormData(form));
-    convData.push({ id: Date.now().toString(36), ...d });
-    convSave(); convRender();
+    const item = { id: Date.now().toString(36), ...d };
+    convData.push(item);
+    convSave(); convRender(); convRemote('add', item);
   };
   conv.querySelectorAll('[data-f]').forEach(b=> b.onclick = ()=>{ convFilter = b.dataset.f; convRender(); });
   conv.querySelectorAll('select[data-id]').forEach(s=> s.onchange = ()=>{
-    convData.find(c=>c.id===s.dataset.id).estado = s.value; convSave(); convRender();
+    const item = convData.find(c=>c.id===s.dataset.id);
+    item.estado = s.value; convSave(); convRender(); convRemote('update', item);
   });
   conv.querySelectorAll('[data-del]').forEach(b=> b.onclick = ()=>{
     if(confirm('¿Eliminar esta convocatoria?')){
-      convData = convData.filter(c=>c.id!==b.dataset.del); convSave(); convRender();
+      convData = convData.filter(c=>c.id!==b.dataset.del); convSave(); convRender(); convRemote('delete', null, b.dataset.del);
     }
   });
 }
