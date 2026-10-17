@@ -468,6 +468,10 @@
   .conv-due.late{ color:#ff7b7b; font-weight:600; }
   .conv-item select{ padding:5px 8px; border-radius:8px; background:#222; color:#fff; border:1px solid rgba(255,255,255,.3); }
   .conv-empty{ text-align:center; opacity:.8; padding:30px; }
+  .conv-modal{ position:fixed; inset:0; z-index:70; background:rgba(0,0,0,.7); display:flex; align-items:center; justify-content:center; padding:16px; }
+  .conv-modal-box{ background:#1c1c1c; border:1px solid rgba(255,255,255,.25); border-radius:14px; padding:18px; width:min(560px,100%); max-height:90vh; overflow:auto; display:flex; flex-direction:column; gap:6px; }
+  .conv-modal-box.conv-form{ display:grid; }
+  .conv-table tr[data-row]{ cursor:pointer; user-select:none; }
   .conv-table{ width:100%; border-collapse:collapse; background:rgba(0,0,0,.72); border-radius:14px; overflow:hidden; }
   .conv-table th, .conv-table td{ padding:10px 12px; text-align:left; border-bottom:1px solid rgba(255,255,255,.15); vertical-align:top; }
   .conv-table th{ font-size:.85em; opacity:.7; }
@@ -480,7 +484,7 @@
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v3.9.0</div>
+  <div id="version">v3.10.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -971,6 +975,55 @@ const esc = (t)=> String(t ?? '').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;'
 
 const links = (t)=> String(t || '').split(/[\s,]+/).filter(u=>/^https?:\/\//i.test(u));
 
+function convDetail(id, editing){
+  const c = convData.find(x=>x.id===id);
+  if(!c) return;
+  const ov = document.createElement('div');
+  ov.className = 'conv-modal';
+  const close = ()=> ov.remove();
+  const field = (label, val)=> `<div class="conv-meta">${label}</div><div style="white-space:pre-wrap;word-break:break-word">${val || '—'}</div>`;
+
+  if(!editing){
+    ov.innerHTML = `<div class="conv-modal-box">
+      <h2>${esc(c.nombre)}</h2>
+      ${field('Entidad', esc(c.entidad))}
+      ${field('Fecha de cierre', esc(c.fecha))}
+      ${field('Estado', esc(c.estado))}
+      ${field('Enlaces', links(c.enlace).map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener" style="color:#ffc46b">${esc(u)}</a>`).join('<br>'))}
+      ${field('Notas', esc(c.notas))}
+      <div class="conv-row" style="margin-top:14px">
+        <button class="conv-btn sec" data-a="del">Eliminar</button>
+        <span><button class="conv-btn sec" data-a="close">Cerrar</button> <button class="conv-btn" data-a="edit">Editar</button></span>
+      </div></div>`;
+    ov.querySelector('[data-a=close]').onclick = close;
+    ov.querySelector('[data-a=edit]').onclick = ()=>{ close(); convDetail(id, true); };
+    ov.querySelector('[data-a=del]').onclick = ()=>{
+      if(!confirm('¿Eliminar esta convocatoria?')) return;
+      convData = convData.filter(x=>x.id!==id); convSave(); close(); convRender(); convRemote('delete', null, id);
+    };
+  } else {
+    ov.innerHTML = `<form class="conv-modal-box conv-form">
+      <h2 class="full">Editar convocatoria</h2>
+      <input class="full" name="nombre" required value="${esc(c.nombre)}">
+      <input name="entidad" placeholder="Entidad" value="${esc(c.entidad)}">
+      <input name="fecha" type="date" value="${esc(c.fecha)}">
+      <select name="estado">${ESTADOS.map(e=>`<option ${e===c.estado?'selected':''}>${e}</option>`).join('')}</select>
+      <textarea class="full" name="enlace" rows="3" placeholder="Enlaces (uno por línea)">${esc(c.enlace)}</textarea>
+      <textarea class="full" name="notas" rows="3" placeholder="Notas">${esc(c.notas)}</textarea>
+      <button class="conv-btn sec" type="button" data-a="cancel">Cancelar</button>
+      <button class="conv-btn" type="submit">Guardar</button></form>`;
+    ov.querySelector('[data-a=cancel]').onclick = ()=>{ close(); convDetail(id); };
+    ov.querySelector('form').onsubmit = (e)=>{
+      e.preventDefault();
+      if(!confirm('¿Guardar los cambios en esta convocatoria?')) return;
+      Object.assign(c, Object.fromEntries(new FormData(e.target)));
+      convSave(); close(); convRender(); convRemote('update', c);
+    };
+  }
+  ov.addEventListener('click', (e)=>{ if(e.target === ov) close(); });
+  conv.appendChild(ov);
+}
+
 function openConvocatorias(){
   menu.hidden = true;
   conv.hidden = false;
@@ -1005,7 +1058,7 @@ function convRender(){
       </div>
       ${list.length ? `<table class="conv-table">
         <thead><tr><th>Convocatoria</th><th>Cierre</th><th>Link</th><th></th></tr></thead>
-        <tbody>${list.map(c=>`<tr>
+        <tbody>${list.map(c=>`<tr data-row="${c.id}">
           <td>${esc(c.nombre)}<div class="conv-meta">${esc(c.entidad)}</div></td>
           <td class="conv-due ${c.fecha && c.fecha < today && c.estado==='Por postular' ? 'late':''}">${esc(c.fecha) || '—'}</td>
           <td>${links(c.enlace).map((u,i,arr)=>`<a href="${esc(u)}" target="_blank" rel="noopener">${arr.length>1 ? 'Link '+(i+1) : 'Abrir'}</a>`).join('<br>') || '—'}</td>
@@ -1026,8 +1079,17 @@ function convRender(){
   conv.querySelectorAll('[data-f]').forEach(b=> b.onclick = ()=>{ convFilter = b.dataset.f; convRender(); });
   conv.querySelectorAll('select[data-id]').forEach(s=> s.onchange = ()=>{
     const item = convData.find(c=>c.id===s.dataset.id);
+    if(!confirm('¿Cambiar el estado de "' + item.nombre + '" a "' + s.value + '"?')){ convRender(); return; }
     item.estado = s.value; convSave(); convRender(); convRemote('update', item);
   });
+  // Doble clic (o doble toque) sobre una fila: muestra toda la información
+  let lastTap = { id:null, t:0 };
+  conv.querySelectorAll('tr[data-row]').forEach(tr=> tr.addEventListener('click', (e)=>{
+    if(e.target.closest('a,select,button')) return;
+    const now = Date.now();
+    if(lastTap.id === tr.dataset.row && now - lastTap.t < 400){ lastTap = { id:null, t:0 }; convDetail(tr.dataset.row); }
+    else lastTap = { id: tr.dataset.row, t: now };
+  }));
   conv.querySelectorAll('[data-del]').forEach(b=> b.onclick = ()=>{
     if(confirm('¿Eliminar esta convocatoria?')){
       convData = convData.filter(c=>c.id!==b.dataset.del); convSave(); convRender(); convRemote('delete', null, b.dataset.del);
