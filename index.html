@@ -480,7 +480,7 @@
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v3.8.0</div>
+  <div id="version">v3.9.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -969,6 +969,8 @@ async function convLoad(){
 }
 const esc = (t)=> String(t ?? '').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+const links = (t)=> String(t || '').split(/[\s,]+/).filter(u=>/^https?:\/\//i.test(u));
+
 function openConvocatorias(){
   menu.hidden = true;
   conv.hidden = false;
@@ -994,7 +996,7 @@ function convRender(){
         <input name="entidad" placeholder="Entidad / organización">
         <input name="fecha" type="date" title="Fecha límite">
         <select name="estado">${ESTADOS.map(e=>`<option>${e}</option>`).join('')}</select>
-        <input name="enlace" type="url" placeholder="Enlace (opcional)">
+        <textarea class="full" name="enlace" rows="2" placeholder="Enlaces (uno por línea)"></textarea>
         <textarea class="full" name="notas" rows="2" placeholder="Notas de seguimiento"></textarea>
         <button class="conv-btn full" type="submit">Guardar</button>
       </form>
@@ -1006,7 +1008,7 @@ function convRender(){
         <tbody>${list.map(c=>`<tr>
           <td>${esc(c.nombre)}<div class="conv-meta">${esc(c.entidad)}</div></td>
           <td class="conv-due ${c.fecha && c.fecha < today && c.estado==='Por postular' ? 'late':''}">${esc(c.fecha) || '—'}</td>
-          <td>${c.enlace ? `<a href="${esc(c.enlace)}" target="_blank" rel="noopener">Abrir</a>` : '—'}</td>
+          <td>${links(c.enlace).map((u,i,arr)=>`<a href="${esc(u)}" target="_blank" rel="noopener">${arr.length>1 ? 'Link '+(i+1) : 'Abrir'}</a>`).join('<br>') || '—'}</td>
           <td class="conv-act"><select data-id="${c.id}">${ESTADOS.map(e=>`<option ${e===c.estado?'selected':''}>${e}</option>`).join('')}</select> <button class="conv-btn sec" data-del="${c.id}" title="Eliminar">🗑</button></td>
         </tr>`).join('')}</tbody></table>` : '<div class="conv-empty">No hay convocatorias. Toca “+ Nueva” para agregar una.</div>'}
     </div>`;
