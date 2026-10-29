@@ -372,12 +372,72 @@
     font-weight:800;
     margin-bottom:24px;
   }
+
+  /* Menú principal */
+  #menu{
+    position:fixed;
+    inset:0;
+    z-index:50;
+    background:#111 url('assets/fondo.gif') center/cover no-repeat;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:24px;
+    padding:24px;
+  }
+  #menu[hidden]{ display:none; }
+  .menu-title{ color:#fff; font-size:1.6em; font-weight:600; text-shadow:0 2px 8px rgba(0,0,0,.6); }
+  .menu-grid{ display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
+  .menu-tile{
+    width:min(40vw,200px);
+    aspect-ratio:1/1;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,.35);
+    background:rgba(0,0,0,.72);
+    color:#fff;
+    font-size:1.1em;
+    font-weight:600;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:12px;
+    text-align:center;
+  }
+  .menu-tile .ico{ font-size:2.6em; }
+  .menu-tile:hover{ background:#d88b1a; }
+  .menu-back{
+    border:1px solid rgba(255,255,255,.35);
+    background:rgba(0,0,0,.72);
+    color:#fff;
+    border-radius:20px;
+    padding:8px 18px;
+    cursor:pointer;
+    font-size:1em;
+  }
+  #menu-btn{
+    position:fixed;
+    top:16px;
+    left:16px;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.35);
+    background:rgba(0,0,0,.72);
+    color:#fff;
+    font-size:1.1em;
+    cursor:pointer;
+    z-index:10;
+  }
 </style>
 </head>
 <body>
 
   <div id="viewer"></div>
-  <div id="version">v3.5.4</div>
+  <div id="version">v3.6.0</div>
   <div id="counter"></div>
   <div id="nav">
     <button id="prev-btn" class="nav-btn" title="Anterior">‹</button>
@@ -391,6 +451,13 @@
     <div id="tutorial-label" class="tutorial-label"></div>
     <button id="tutorial-skip" class="tutorial-skip">Saltar ▶</button>
   </div>
+
+  <div id="menu">
+    <div class="menu-title" id="menu-title">Menú</div>
+    <div class="menu-grid" id="menu-grid"></div>
+    <button class="menu-back" id="menu-back" hidden>‹ Volver</button>
+  </div>
+  <button id="menu-btn" title="Menú">☰</button>
 
 <script type="module">
 /*
@@ -808,7 +875,48 @@ function runTutorial(){
   showStep();
 }
 
-render().then(()=> setTimeout(runTutorial, 800));
+/* ---- Menú principal ---- */
+const menu = document.getElementById('menu');
+const menuTitle = document.getElementById('menu-title');
+const menuGrid = document.getElementById('menu-grid');
+const menuBack = document.getElementById('menu-back');
+const menuBtn = document.getElementById('menu-btn');
+
+function showTiles(title, tiles, back){
+  menuTitle.textContent = title;
+  menuGrid.innerHTML = '';
+  tiles.forEach(t=>{
+    const b = document.createElement('button');
+    b.className = 'menu-tile';
+    b.innerHTML = `<span class="ico">${t.icon}</span><span>${t.label}</span>`;
+    b.addEventListener('click', t.action);
+    menuGrid.appendChild(b);
+  });
+  menuBack.hidden = !back;
+  menuBack.onclick = back;
+}
+
+function showMainMenu(){
+  menu.hidden = false;
+  showTiles('Menú', [
+    { icon:'📽️', label:'Presentaciones', action: showTemas },
+  ], null);
+}
+
+function showTemas(){
+  showTiles('Temas', [
+    { icon:'📅', label:'10 de Septiembre', action: startPresentation },
+  ], showMainMenu);
+}
+
+function startPresentation(){
+  menu.hidden = true;
+  current = 0;
+  render().then(()=> setTimeout(runTutorial, 800));
+}
+
+menuBtn.addEventListener('click', showMainMenu);
+showMainMenu();
 
 if('serviceWorker' in navigator){
   window.addEventListener('load', ()=>{
